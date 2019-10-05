@@ -21,57 +21,57 @@ var direction = 'left';
 var currentRow;
 var currentCol;
 var newDirection = 'left';
-var snake = [ ]
+var snake = []
 
 
 function setupSnake() {
     snake = [];
-    
-    currentRow = Math.floor(rows/2);
-    currentCol = Math.floor(columns/2);
-    snake.push({x: currentRow, y: currentCol});
-    snake.push({x: (currentRow), y: currentCol + 1 });
-    snake.push({x: (currentRow), y: currentCol + 2 });
-    
-    
-    
-    
+
+    currentRow = Math.floor(rows / 2);
+    currentCol = Math.floor(columns / 2);
+    snake.push({ x: currentRow, y: currentCol });
+    snake.push({ x: (currentRow), y: currentCol + 1 });
+    snake.push({ x: (currentRow), y: currentCol + 2 });
+
+
+
+
 
 }
 
 function drawSnake() {
     ctx.fillStyle = 'lime';
-    
+
     var i = 0;
-    for(i; i < snake.length ; i++){
+    for (i; i < snake.length; i++) {
         ctx.fillStyle = 'lime';
-        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0], squareLocations[snake[i].x][snake[i].y][1] , squareSize, squareSize);
-        if(i == 0){
+        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0], squareLocations[snake[i].x][snake[i].y][1], squareSize, squareSize);
+        if (i == 0) {
             console.log("Drawing eyes");
             ctx.fillStyle = '#000000';
-            switch(direction){
+            switch (direction) {
                 case "left":
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize/5,squareLocations[snake[i].x][snake[i].y][1] + squareSize/5, squareSize/5, squareSize/5);
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize/5,squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize/2.5), squareSize/5, squareSize/5);
-                        break;
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize / 2.5), squareSize / 5, squareSize / 5);
+                    break;
                 case "right":
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize/2.5),squareLocations[snake[i].x][snake[i].y][1] + squareSize/5, squareSize/5, squareSize/5);
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize/2.5),squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), squareSize/5, squareSize/5);
-                        break;
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), squareSize / 5, squareSize / 5);
+                    break;
                 case "up":
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize/5,squareLocations[snake[i].x][snake[i].y][1] + squareSize/5, squareSize/5, squareSize/5);
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize/2.5),squareLocations[snake[i].x][snake[i].y][1] + 10, squareSize/5, squareSize/5);
-                        break;
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
+                    break;
                 case "down":
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize/5,squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize/2.5), squareSize/5, squareSize/5);
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize/2.5),squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize/2.5), squareSize/5, squareSize/5);
-                        break;                       
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize / 2.5), squareSize / 5, squareSize / 5);
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize / 2.5), squareSize / 5, squareSize / 5);
+                    break;
 
             }
-           
-            
-    }
-   
+
+
+        }
+
     }
 }
 
@@ -92,56 +92,70 @@ function setup() {
 
     dx = width / 200;
     dy = dx;
-    squareSize = 50;
+    squareSize = width / 38.4;
     xSquares = 0;
     ySquares = 0;
-    
+
 }
 //setInterval(addPart, 500);
-function addPart(amountOfParts){
-        for(let i = 0; i < amountOfParts; i++){
-            var snakeLength = snake.length - 1;
-            snake.push({x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y) });
+function addPart(amountOfParts) {
+    for (let i = 0; i < amountOfParts; i++) {
+        var snakeLength = snake.length - 1;
+        switch (direction) {
+            case "up":
+                snake.push({ x: (snake[snakeLength].x + 1), y: (snake[snakeLength].y) });
+                break;
+            case "down":
+                snake.push({ x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y ) });
+                break;
+            case "left":
+                snake.push({ x: (snake[snakeLength].x), y: (snake[snakeLength].y + 1 ) });
+                break;
+            case "right":
+                snake.push({ x: (snake[snakeLength].x), y: (snake[snakeLength].y - 1) });
+                break;
+
+
         }
-        
-    
-    
+    }
+
+
+
 }
 
 timerApple = null;
 var appleX;
 var appleY;
-function placeApple()
-{
+function placeApple() {
     let loopVariable = true;
     console.log("New Apple");
-    while(loopVariable){
-        appleX = Math.floor((Math.random() * rows)); 
-        appleY = Math.floor((Math.random() * columns)); 
-        let i  = 0;
-        for(i; i < snake.length ; i++){
-            if(snake[i].x == appleX && snake[i].y == appleY){
+    while (loopVariable) {
+        appleX = Math.floor((Math.random() * rows));
+        appleY = Math.floor((Math.random() * columns));
+        let i = 0;
+        for (i; i < snake.length; i++) {
+            if (snake[i].x == appleX && snake[i].y == appleY) {
                 ;
-            } else{
+            } else {
                 console.log("Found New Apple Location");
                 console.log("Apple X: " + appleX + "\n" + "Apple Y: " + appleY);
                 drawApple();
                 loopVariable = false;
                 break;
-            } 
+            }
         }
     }
 
- 
+
 }
 
 
 function getDxDy() {
-    if(timer == null){
+    if (timer == null) {
         timer = setInterval(move, 110);
     }
-    
-   
+
+
 
     setup();
     getSquares();
@@ -153,9 +167,9 @@ function getDxDy() {
     drawApple();
 
 }
-function drawApple(){
+function drawApple() {
     ctx.fillStyle = '#FF0000';
-    ctx.fillRect(squareLocations[appleX][appleY][0],squareLocations[appleX][appleY][1], squareSize, squareSize);
+    ctx.fillRect(squareLocations[appleX][appleY][0], squareLocations[appleX][appleY][1], squareSize, squareSize);
 }
 function drawSquares() {
 
@@ -165,30 +179,30 @@ function drawSquares() {
         var j = 0;
         for (j; j < squareLocations[i].length; j++) {
             ctx.fillRect(squareLocations[i][j][0], squareLocations[i][j][1], squareSize, squareSize);
-            
 
 
 
-            }
+
         }
     }
+}
 
 
 
-function collisionApple(){
-    if(snake[0].x == appleX && snake[0].y == appleY){
+function collisionApple() {
+    if (snake[0].x == appleX && snake[0].y == appleY) {
         addPart(2);
-        
+
         placeApple();
-       
+
     }
 }
-function drawLastSquare(){
+function drawLastSquare() {
     ctx.fillStyle = '#372E2E';
     var index = snake.length - 1;
-   
-    ctx.clearRect(squareLocations[snake[index].x][snake[index].y][0] - 1, squareLocations[snake[index].x][snake[index].y][1] - 1 , squareSize + 2.5, squareSize + 2.5);
-    ctx.fillRect(squareLocations[snake[index].x][snake[index].y][0], squareLocations[snake[index].x][snake[index].y][1] , squareSize, squareSize);
+
+    ctx.clearRect(squareLocations[snake[index].x][snake[index].y][0] - 1, squareLocations[snake[index].x][snake[index].y][1] - 1, squareSize + 2.5, squareSize + 2.5);
+    ctx.fillRect(squareLocations[snake[index].x][snake[index].y][0], squareLocations[snake[index].x][snake[index].y][1], squareSize, squareSize);
 }
 
 function getSquares() {
@@ -240,18 +254,18 @@ timer = null;
 function updatePos() {
     var i = -1;
 
-   /*  for (i; i > (snake.body.length * -1) + 1; i--) {
-        snake.body[i] = snake.body[i - 1];
-    } */
+    /*  for (i; i > (snake.body.length * -1) + 1; i--) {
+         snake.body[i] = snake.body[i - 1];
+     } */
     var i = snake.length - 1;
     drawLastSquare();
-    for(i;i > 0; i--){
-    snake[i] = snake[i-1];
- 
+    for (i; i > 0; i--) {
+        snake[i] = snake[i - 1];
+
     }
-    
+
     snake.shift();
-    snake.unshift({ "x": newHead[0], "y" : newHead[1]});
+    snake.unshift({ "x": newHead[0], "y": newHead[1] });
 
     //drawSquares();
     drawSnake();
@@ -259,7 +273,7 @@ function updatePos() {
 }
 
 function move() {
-    if(newDirection != direction){
+    if (newDirection != direction) {
         direction = newDirection;
     }
     switch (direction) {
@@ -275,36 +289,37 @@ function move() {
 
             break;
         case 'left':
-                newHead[0] = currentRow;
-                newHead[1] = currentCol - 1 ;
-                direction = 'left';
+            newHead[0] = currentRow;
+            newHead[1] = currentCol - 1;
+            direction = 'left';
 
             break;
         case 'right':
-                newHead[0] = currentRow;
-                newHead[1] = currentCol + 1;
-                direction = 'right';
-                break;
+            newHead[0] = currentRow;
+            newHead[1] = currentCol + 1;
+            direction = 'right';
+            break;
     }
     var i = 0;
 
     //Collision Detection
-    for(i; i < snake.length ; i++){
-        if(snake[i].x == newHead[0] && snake[i].y == newHead[1]){
+    for (i; i < snake.length; i++) {
+        if (snake[i].x == newHead[0] && snake[i].y == newHead[1]) {
             console.log("dead");
             getDxDy();
             setupSnake();
             newHead = [currentRow, currentCol];
             direction = 'right';
             break;
-        } }
+        }
+    }
 
     collisionApple();
     currentCol = newHead[1];
     currentRow = newHead[0];
-       
-        updatePos()
-    }
+
+    updatePos()
+}
 
 var oldDirection = "right";
 
