@@ -44,10 +44,36 @@ function drawSnake() {
     
     var i = 0;
     for(i; i < snake.length ; i++){
+        ctx.fillStyle = 'lime';
         ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0], squareLocations[snake[i].x][snake[i].y][1] , squareSize, squareSize);
+        if(i == 0){
+            console.log("Drawing eyes");
+            ctx.fillStyle = '#000000';
+            switch(direction){
+                case "left":
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + 10,squareLocations[snake[i].x][snake[i].y][1] + 10, 10, 10);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + 10,squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), 10, 10);
+                        break;
+                case "right":
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - 20),squareLocations[snake[i].x][snake[i].y][1] + 10, 10, 10);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - 20),squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), 10, 10);
+                        break;
+                case "up":
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + 10,squareLocations[snake[i].x][snake[i].y][1] + 10, 10, 10);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - 20),squareLocations[snake[i].x][snake[i].y][1] + 10, 10, 10);
+                        break;
+                case "down":
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + 10,squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), 10, 10);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - 20),squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), 10, 10);
+                        break;                       
+
+            }
+           
+            
     }
    
     }
+}
 
 
 
@@ -112,7 +138,7 @@ function placeApple()
 
 function getDxDy() {
     if(timer == null){
-        timer = setInterval(move, 100);
+        timer = setInterval(move, 110);
     }
     
    
@@ -139,10 +165,15 @@ function drawSquares() {
         var j = 0;
         for (j; j < squareLocations[i].length; j++) {
             ctx.fillRect(squareLocations[i][j][0], squareLocations[i][j][1], squareSize, squareSize);
+            
+
+
+
+            }
         }
     }
 
-}
+
 
 function collisionApple(){
     if(snake[0].x == appleX && snake[0].y == appleY){
