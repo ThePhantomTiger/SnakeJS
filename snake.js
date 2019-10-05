@@ -56,7 +56,7 @@ function drawSnake() {
                     break;
                 case "right":
                     ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), squareSize / 5, squareSize / 5);
+                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize / 2.5), squareSize / 5, squareSize / 5);
                     break;
                 case "up":
                     ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
@@ -101,22 +101,23 @@ function setup() {
 function addPart(amountOfParts) {
     for (let i = 0; i < amountOfParts; i++) {
         var snakeLength = snake.length - 1;
+        var snakeXY;
         switch (direction) {
             case "up":
-                snake.push({ x: (snake[snakeLength].x + 1), y: (snake[snakeLength].y) });
+                snakeXY = { x: (snake[snakeLength].x + 1), y: (snake[snakeLength].y) };
                 break;
             case "down":
-                snake.push({ x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y ) });
+                snakeXY = { x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y) };
                 break;
             case "left":
-                snake.push({ x: (snake[snakeLength].x), y: (snake[snakeLength].y + 1 ) });
+                snakeXY = { x: (snake[snakeLength].x ), y: (snake[snakeLength].y + 1) };
                 break;
             case "right":
-                snake.push({ x: (snake[snakeLength].x), y: (snake[snakeLength].y - 1) });
+                snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y - 1) };
                 break;
-
-
         }
+        snake.push(snakeXY);
+
     }
 
 
@@ -304,12 +305,14 @@ function move() {
 
     //Collision Detection
     for (i; i < snake.length; i++) {
-        if (snake[i].x == newHead[0] && snake[i].y == newHead[1]) {
+        if (snake[i].x == newHead[0] && snake[i].y == newHead[1] || (newHead[0] < 0 || newHead[1] < 0 || newHead[0] > rows - 1 || newHead[1] > columns - 1)) {
             console.log("dead");
             getDxDy();
             setupSnake();
             newHead = [currentRow, currentCol];
-            direction = 'right';
+            oldDirection = 'down';
+            direction = 'up';
+            newDirection = 'up';
             break;
         }
     }
