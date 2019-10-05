@@ -6,8 +6,9 @@ var height;
 var width;
 var dx;
 var dy;
-var squareHeight;
-var squareWidth;
+var squareSize;
+var squareSize;
+var squareSize;
 var xSquares;
 var ySquares;
 var startX;
@@ -43,7 +44,7 @@ function drawSnake() {
     
     var i = 0;
     for(i; i < snake.length ; i++){
-        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0], squareLocations[snake[i].x][snake[i].y][1] , squareWidth, squareHeight);
+        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0], squareLocations[snake[i].x][snake[i].y][1] , squareSize, squareSize);
     }
    
     }
@@ -64,12 +65,11 @@ function setup() {
     ctx.lineWidth = 0;
 
     dx = width / 200;
-    dy = height / 50;
-    squareWidth = 20;
-    squareHeight = 20;
+    dy = dx;
+    squareSize = 50;
     xSquares = 0;
     ySquares = 0;
-    dy = 4;
+    
 }
 //setInterval(addPart, 500);
 function addPart(amountOfParts){
@@ -129,7 +129,7 @@ function getDxDy() {
 }
 function drawApple(){
     ctx.fillStyle = '#FF0000';
-    ctx.fillRect(squareLocations[appleX][appleY][0],squareLocations[appleX][appleY][1], squareWidth, squareHeight);
+    ctx.fillRect(squareLocations[appleX][appleY][0],squareLocations[appleX][appleY][1], squareSize, squareSize);
 }
 function drawSquares() {
 
@@ -138,7 +138,7 @@ function drawSquares() {
     for (i; i < (squareLocations).length; i++) {
         var j = 0;
         for (j; j < squareLocations[i].length; j++) {
-            ctx.fillRect(squareLocations[i][j][0], squareLocations[i][j][1], squareWidth, squareHeight);
+            ctx.fillRect(squareLocations[i][j][0], squareLocations[i][j][1], squareSize, squareSize);
         }
     }
 
@@ -156,8 +156,8 @@ function drawLastSquare(){
     ctx.fillStyle = '#372E2E';
     var index = snake.length - 1;
    
-    ctx.clearRect(squareLocations[snake[index].x][snake[index].y][0] - 1, squareLocations[snake[index].x][snake[index].y][1] - 1 , squareWidth + 2.5, squareHeight + 2.5);
-    ctx.fillRect(squareLocations[snake[index].x][snake[index].y][0], squareLocations[snake[index].x][snake[index].y][1] , squareWidth, squareHeight);
+    ctx.clearRect(squareLocations[snake[index].x][snake[index].y][0] - 1, squareLocations[snake[index].x][snake[index].y][1] - 1 , squareSize + 2.5, squareSize + 2.5);
+    ctx.fillRect(squareLocations[snake[index].x][snake[index].y][0], squareLocations[snake[index].x][snake[index].y][1] , squareSize, squareSize);
 }
 
 function getSquares() {
@@ -169,15 +169,15 @@ function getSquares() {
     var column = 0;
     squareLocations = [];
     //Get Rows
-    for (y; y < height; y += dy + squareHeight) {
+    for (y; y < height; y += dy + squareSize) {
         x = 0;
-        if (y > height - squareHeight - dy) {
+        if (y > height - squareSize - dy) {
             break;
         }
         rows++;
         squareLocations.push([]);
         //Get Columns
-        for (x; x < width; x += dx + squareWidth) {
+        for (x; x < width - squareSize - dx; x += dx + squareSize) {
             if (x > window.innerWidth - startX - dx) {
                 break;
             }
