@@ -51,20 +51,20 @@ function drawSnake() {
             ctx.fillStyle = '#000000';
             switch(direction){
                 case "left":
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + 10,squareLocations[snake[i].x][snake[i].y][1] + 10, 10, 10);
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + 10,squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), 10, 10);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize/5,squareLocations[snake[i].x][snake[i].y][1] + squareSize/5, squareSize/5, squareSize/5);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize/5,squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize/2.5), squareSize/5, squareSize/5);
                         break;
                 case "right":
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - 20),squareLocations[snake[i].x][snake[i].y][1] + 10, 10, 10);
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - 20),squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), 10, 10);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize/2.5),squareLocations[snake[i].x][snake[i].y][1] + squareSize/5, squareSize/5, squareSize/5);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize/2.5),squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), squareSize/5, squareSize/5);
                         break;
                 case "up":
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + 10,squareLocations[snake[i].x][snake[i].y][1] + 10, 10, 10);
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - 20),squareLocations[snake[i].x][snake[i].y][1] + 10, 10, 10);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize/5,squareLocations[snake[i].x][snake[i].y][1] + squareSize/5, squareSize/5, squareSize/5);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize/2.5),squareLocations[snake[i].x][snake[i].y][1] + 10, squareSize/5, squareSize/5);
                         break;
                 case "down":
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + 10,squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), 10, 10);
-                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - 20),squareLocations[snake[i].x][snake[i].y][1] + (squareSize - 20), 10, 10);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize/5,squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize/2.5), squareSize/5, squareSize/5);
+                        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize/2.5),squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize/2.5), squareSize/5, squareSize/5);
                         break;                       
 
             }
