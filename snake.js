@@ -98,7 +98,7 @@ function placeApple()
                 ;
             } else{
                 console.log("Found New Apple Location");
-                console.log("Apple: X" + appleX + "\n" + "Apple: Y" + appleY);
+                console.log("Apple X: " + appleX + "\n" + "Apple Y: " + appleY);
                 drawApple();
                 loopVariable = false;
                 break;
