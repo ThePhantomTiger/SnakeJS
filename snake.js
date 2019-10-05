@@ -72,9 +72,12 @@ function setup() {
     dy = 4;
 }
 //setInterval(addPart, 500);
-function addPart(){
-        var snakeLength = snake.length - 1;
-        snake.push({x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y) });
+function addPart(amountOfParts){
+        for(let i = 0; i < amountOfParts; i++){
+            var snakeLength = snake.length - 1;
+            snake.push({x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y) });
+        }
+        
     
     
 }
@@ -143,11 +146,10 @@ function drawSquares() {
 
 function collisionApple(){
     if(snake[0].x == appleX && snake[0].y == appleY){
-        addPart();
-        addPart();
-        placeApple();
-
+        addPart(2);
         
+        placeApple();
+       
     }
 }
 function drawLastSquare(){
