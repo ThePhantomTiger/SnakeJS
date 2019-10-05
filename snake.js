@@ -195,7 +195,8 @@ function drawSquares() {
 
     ctx.fillStyle = '#372E2E';
     var i = 0;
-    for (i; i < (squareLocations).length; i++) {
+    squareLocations.map(row=>{row.map(column=>{ctx.fillRect(column[0], column[1], squareSize, squareSize)})})
+    /* for (i; i < (squareLocations).length; i++) {
         var j = 0;
         for (j; j < squareLocations[i].length; j++) {
             ctx.fillRect(squareLocations[i][j][0], squareLocations[i][j][1], squareSize, squareSize);
@@ -204,7 +205,7 @@ function drawSquares() {
 
 
         }
-    }
+    } */
 }
 
 
