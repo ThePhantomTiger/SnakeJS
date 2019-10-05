@@ -113,29 +113,29 @@ function addPart(amountOfParts) {
                 snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y) + 1 };
                 break;
             case "right":
-                snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y ) - 1 };
+                snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y) - 1 };
                 break;
         }
-            if(checkInRange(snakeXY)){
-                snake.push(snakeXY);
-            } else if(checkInRange(snakeXY = { x: (snake[snakeLength].x + 1), y: (snake[snakeLength].y) })){
-                snake.push(snakeXY);
-            }else if(checkInRange(snakeXY = { x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y) })){
-                snake.push(snakeXY);
-            }else if(checkInRange(snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y - 1) })){
-                snake.push(snakeXY);
-            }else if(checkInRange(snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y + 1) })){
-                snake.push(snakeXY);
-            }
-            
-        
+        if (checkInRange(snakeXY)) {
+            snake.push(snakeXY);
+        } else if (checkInRange(snakeXY = { x: (snake[snakeLength].x + 1), y: (snake[snakeLength].y) })) {
+            snake.push(snakeXY);
+        } else if (checkInRange(snakeXY = { x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y) })) {
+            snake.push(snakeXY);
+        } else if (checkInRange(snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y - 1) })) {
+            snake.push(snakeXY);
+        } else if (checkInRange(snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y + 1) })) {
+            snake.push(snakeXY);
+        }
+
+
 
     }
 }
-function checkInRange(snakeXY){
-    if(snakeXY.x >= rows || snakeXY.y >= columns || snakeXY.x < 0 || snakeXY.y < 0){
+function checkInRange(snakeXY) {
+    if (snakeXY.x >= rows || snakeXY.y >= columns || snakeXY.x < 0 || snakeXY.y < 0) {
         return false;
-    } else{
+    } else {
         return true;
     }
 }
@@ -149,23 +149,25 @@ function placeApple() {
     while (loopVariable) {
         appleX = Math.floor((Math.random() * rows));
         appleY = Math.floor((Math.random() * columns));
-        let i = 0;
-        for (i; i < snake.length; i++) {
+
+        let continueVariable = false;
+        for (let i = 0; i < snake.length; i++) {
             if (snake[i].x == appleX && snake[i].y == appleY) {
-                ;
-            } else {
-                console.log("Found New Apple Location");
-                console.log("Apple X: " + appleX + "\n" + "Apple Y: " + appleY);
-                loopVariable = false;
+                continueVariable = true;
                 break;
             }
         }
+        if (continueVariable) {
+            continue;}
+        loopVariable = false;
+        drawApple();
+        
     }
-    
-    drawApple();
-
-
 }
+
+
+
+
 
 
 function getDxDy() {
