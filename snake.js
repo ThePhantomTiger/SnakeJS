@@ -110,18 +110,34 @@ function addPart(amountOfParts) {
                 snakeXY = { x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y) };
                 break;
             case "left":
-                snakeXY = { x: (snake[snakeLength].x ), y: (snake[snakeLength].y + 1) };
+                snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y) + 1 };
                 break;
             case "right":
-                snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y - 1) };
+                snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y ) - 1 };
                 break;
         }
-        snake.push(snakeXY);
+            if(checkInRange(snakeXY)){
+                snake.push(snakeXY);
+            } else if(checkInRange(snakeXY = { x: (snake[snakeLength].x + 1), y: (snake[snakeLength].y) })){
+                snake.push(snakeXY);
+            }else if(checkInRange(snakeXY = { x: (snake[snakeLength].x - 1), y: (snake[snakeLength].y) })){
+                snake.push(snakeXY);
+            }else if(checkInRange(snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y - 1) })){
+                snake.push(snakeXY);
+            }else if(checkInRange(snakeXY = { x: (snake[snakeLength].x), y: (snake[snakeLength].y + 1) })){
+                snake.push(snakeXY);
+            }
+            
+        
 
     }
-
-
-
+}
+function checkInRange(snakeXY){
+    if(snakeXY.x >= rows || snakeXY.y >= columns || snakeXY.x < 0 || snakeXY.y < 0){
+        return false;
+    } else{
+        return true;
+    }
 }
 
 timerApple = null;
@@ -140,12 +156,13 @@ function placeApple() {
             } else {
                 console.log("Found New Apple Location");
                 console.log("Apple X: " + appleX + "\n" + "Apple Y: " + appleY);
-                drawApple();
                 loopVariable = false;
                 break;
             }
         }
     }
+    
+    drawApple();
 
 
 }
@@ -204,6 +221,7 @@ function drawLastSquare() {
 
     ctx.clearRect(squareLocations[snake[index].x][snake[index].y][0] - 1, squareLocations[snake[index].x][snake[index].y][1] - 1, squareSize + 2.5, squareSize + 2.5);
     ctx.fillRect(squareLocations[snake[index].x][snake[index].y][0], squareLocations[snake[index].x][snake[index].y][1], squareSize, squareSize);
+    drawApple();
 }
 
 function getSquares() {
