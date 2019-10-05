@@ -296,7 +296,18 @@ function updatePos() {
 function move() {
 
     if(directionQue.length > 0){
-        direction = directionQue.shift();
+        let tempDirection = directionQue.shift();
+        if(tempDirection == "right" && direction == "left"){
+            ;
+        } else if(tempDirection == "left" && direction == "right"){
+            ;
+        }else if(tempDirection == "up" && direction == "down"){
+            ;
+        }else if(tempDirection == "down" && direction == "up"){
+            ;
+        } else{
+            direction = tempDirection;
+        }
     }
     switch (direction) {
         case 'up':
@@ -346,22 +357,27 @@ var directionQue = ['left'];
 function setKey(event) {
     switch (event.keyCode) {
         case 87:
-            if (directionQue[directionQue.length - 1] != 'down' && directionQue[directionQue.length - 1]  != "up") {
-                directionQue.push('up');
-            }
-            break;
+            if (directionQue[directionQue.length - 1] != 'down' && directionQue[directionQue.length - 1]  != "up" ) {
+                    directionQue.push('up');
+                    break;
+
+                }
+                
+            
         case 68:
-            if (directionQue[directionQue.length - 1] != 'left' && directionQue[directionQue.length - 1]  != "right") {
+            if (directionQue[directionQue.length - 1] != 'left' && directionQue[directionQue.length - 1]  != "right" ) {
                 directionQue.push('right');
             }
             break;
         case 65:
-            if (directionQue[directionQue.length - 1] != 'right' && directionQue[directionQue.length - 1]  != "left") {
-                directionQue.push('left');
-            }
+            if (directionQue[directionQue.length - 1] != 'right' && directionQue[directionQue.length - 1]  != "left" ) {
+                    directionQue.push('left');
+
+                }
+            
             break;
         case 83:
-            if (directionQue[directionQue.length - 1] != 'up' && directionQue[directionQue.length - 1]  != "down") {
+            if (directionQue[directionQue.length - 1] != 'up' && directionQue[directionQue.length - 1]  != "down" ) {
                 directionQue.push('down');
             }
             break;
