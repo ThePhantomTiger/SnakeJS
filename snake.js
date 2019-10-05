@@ -227,8 +227,8 @@ function drawLastSquare() {
 }
 
 function getSquares() {
-    x = 0;
-    y = 0;
+    x = squareSize / 2;
+    y = squareSize /2 ;
     rows = 0;
     columns = 0;
     var row = 0;
@@ -236,7 +236,7 @@ function getSquares() {
     squareLocations = [];
     //Get Rows
     for (y; y < height; y += dy + squareSize) {
-        x = 0;
+        x = squareSize / 2;
         if (y > height - squareSize - dy) {
             break;
         }
@@ -294,31 +294,28 @@ function updatePos() {
 }
 
 function move() {
-    if (newDirection != direction) {
-        direction = newDirection;
+
+    if(directionQue.length > 0){
+        direction = directionQue.shift();
     }
     switch (direction) {
         case 'up':
             newHead[0] = currentRow - 1;
             newHead[1] = currentCol;
-            direction = 'up';
             break;
         case 'down':
             newHead[0] = currentRow + 1;
             newHead[1] = currentCol;
-            direction = 'down';
 
             break;
         case 'left':
             newHead[0] = currentRow;
             newHead[1] = currentCol - 1;
-            direction = 'left';
 
             break;
         case 'right':
             newHead[0] = currentRow;
             newHead[1] = currentCol + 1;
-            direction = 'right';
             break;
     }
     var i = 0;
@@ -345,31 +342,29 @@ function move() {
 }
 
 var oldDirection = "right";
-
+var directionQue = ['left'];
 function setKey(event) {
     switch (event.keyCode) {
         case 87:
-            if (direction != 'down') {
-                newDirection = 'up';
+            if (directionQue[directionQue.length - 1] != 'down' && directionQue[directionQue.length - 1]  != "up") {
+                directionQue.push('up');
             }
             break;
         case 68:
-            if (direction != 'left') {
-
-                newDirection = "right";
+            if (directionQue[directionQue.length - 1] != 'left' && directionQue[directionQue.length - 1]  != "right") {
+                directionQue.push('right');
             }
             break;
         case 65:
-            if (direction != 'right') {
-                newDirection = "left";
+            if (directionQue[directionQue.length - 1] != 'right' && directionQue[directionQue.length - 1]  != "left") {
+                directionQue.push('left');
             }
             break;
         case 83:
-            if (direction != 'up') {
-                newDirection = "down";
+            if (directionQue[directionQue.length - 1] != 'up' && directionQue[directionQue.length - 1]  != "down") {
+                directionQue.push('down');
             }
             break;
-
     }
 
 
