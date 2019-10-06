@@ -7,10 +7,9 @@ var width;
 var dx;
 var dy;
 var squareSize;
-var squareSize;
-var squareSize;
-var xSquares;
-var ySquares;
+var xOffset = 50;
+var yOffset = 50;
+
 var startX;
 var startY;
 var x;
@@ -75,7 +74,7 @@ function drawSnake() {
     }
 }
 
-
+var gameType = "normal"
 
 function setup() {
     canvas = document.getElementById('canvas');
@@ -89,12 +88,18 @@ function setup() {
     canvas.height = height;
     ctx.fillStyle = '#372E2E';
     ctx.lineWidth = 0;
+    squares = 12;
 
-    dx = width / 200;
-    dy = dx;
-    squareSize = width / 38.4;
-    xSquares = 0;
-    ySquares = 0;
+    if(gameType == "scale"){
+        dx = (width - xOffset) / 200;
+        dy = dx;
+        squareSize = (width - (xOffset * 2)) / squares;
+    }else if(gameType == "normal"){
+        dx = 3;
+        dy = dx;
+        squareSize = width < height ? ((width - (xOffset * 2) - (dx*squares))/squares) : ((height - (yOffset  * 2) - (dy*squares))/squares) ;
+    }
+    
 
 }
 //setInterval(addPart, 500);
@@ -167,19 +172,27 @@ function placeApple() {
 
 
 
-
-
+function resize(){
+    setup();
+    getSquares();
+    drawSquares();
+    placeApple();
+    drawSnake();
+    drawApple();
+}
 
 function getDxDy() {
     if (timer == null) {
         timer = setInterval(move, 110);
+        setup();
     }
+    
+    
 
 
-
-    setup();
     getSquares();
     drawSquares();
+
 
     setupSnake();
     placeApple();
@@ -196,6 +209,7 @@ function drawSquares() {
     ctx.fillStyle = '#372E2E';
     var i = 0;
     squareLocations.map(row=>{row.map(column=>{ctx.fillRect(column[0], column[1], squareSize, squareSize)})})
+    
     /* for (i; i < (squareLocations).length; i++) {
         var j = 0;
         for (j; j < squareLocations[i].length; j++) {
@@ -236,6 +250,7 @@ function getSquares() {
     var column = 0;
     squareLocations = [];
     //Get Rows
+    if(gameType == "scale"){
     for (y; y < height; y += dy + squareSize) {
         x = squareSize / 2;
         if (y > height - squareSize - dy) {
@@ -258,7 +273,26 @@ function getSquares() {
         }
         row += 1;
     }
-    columns = Math.floor(columns / rows);
+    columns = Math.floor(columns / rows)}
+    else if(gameType == "normal"){
+        var initialY = yOffset;
+        for(let squareRow = 0; squareRow < squares; squareRow++){
+            squareLocations.push([]);
+            var initialX = (width / 2) - (squareSize * (squares/2)) ;
+            for(let squareColumn = 0; squareColumn < squares; squareColumn++){
+                let tempRecord = [initialX, initialY];
+                squareLocations[squareRow].push(tempRecord);
+                initialX += squareSize + dx;
+                
+                
+            }
+            initialY += squareSize + dy;
+
+        }
+        
+        rows = squares;
+        columns = squares;
+    };
 }
 function test() {
 
