@@ -183,7 +183,7 @@ function resize(){
 
 function getDxDy() {
     if (timer == null) {
-        timer = setInterval(move, 110);
+        timer = setInterval(move, 150);
         setup();
     }
     
