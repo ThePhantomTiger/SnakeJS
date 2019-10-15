@@ -23,7 +23,7 @@ var newDirection = 'left';
 var snake;
 var apple;
 
-var availableSpaces = [];
+var availableSpaces = [];``
 
 class Apple {
     constructor(x, y) {
@@ -137,50 +137,22 @@ class Snake {
     }
     addPart(amount){
         this._partBuffer += amount;
-        let currentAvailableSpaces = availableSpaces.filter(space=> (space.x != this._head._x || space.y != this._head._y)
-            && (this._parts.every(snakePart=> snakePart._x != space.x || snakePart._y != space.y)) );
-        if(currentAvailableSpaces.length == 0){
+        
+        if(squares <= this._parts.length){
             alert("You Win");
             getDxDy();
         }
         for(let part = 0; part < this._partBuffer; part++){
-            let currentAvailableSpaces = availableSpaces.filter(space=> (space.x != this._head._x || space.y != this._head._y)
-            && (this._parts.every(snakePart=> snakePart._x != space.x || snakePart._y != space.y)) );
+            let currentAvailableSpaces = squareLocations.filter(square => (square._x != this._head.x && square._y != this._head.y) && this._parts.filter());
+
             if(this._parts.length > 0){
-                let lastSquare = this._parts[this._parts.length - 1];
-                let possibleSquares = [{x:lastSquare.}]
-                if(currentAvailableSpaces.filter(space=> space.x == lastSquare._x + 1 && space.y == lastSquare._y).length > 0 && this._direction == "left"){
-                    this._parts.push(new snakePart(lastSquare._x + 1, lastSquare._y));
-                    this._partBuffer--;
-                }else if({x: lastSquare._x - 1, y: lastSquare._y} in currentAvailableSpaces){
-                    this._parts.push(new snakePart(lastSquare._x - 1, lastSquare._y));
-                    this._partBuffer--;
-                }else if({x: lastSquare._x, y: lastSquare._y + 1} in currentAvailableSpaces){
-                    this._parts.push(new snakePart(lastSquare._x , lastSquare._y + 1));
-                    this._partBuffer--;
-                }else if({x: lastSquare._x, y: lastSquare._y - 1} in currentAvailableSpaces){
-                    this._parts.push(new snakePart(lastSquare._x - 1, lastSquare._y -1));
-                    this._partBuffer--;
-                }
+               continue;
+               
+                
             }else{
                 let lastSquare = this._head;
-                console.log("Only Have Head");
-                console.log(lastSquare._x + " " + lastSquare._y);
-                console.log((lastSquare._x + 1) + " " + lastSquare._y);
-                console.log(currentAvailableSpaces);
-                if(currentAvailableSpaces.filter(space=> space.x == lastSquare._x + 1 && space.y == lastSquare._y).length > 0 && this._direction == "left"){
-                    console.log("test");
-                    this._parts.push(new snakePart(lastSquare._x + 1, lastSquare._y ));
-                    this._partBuffer--;
-                }else if({x: lastSquare._x - 1, y: lastSquare._y} in currentAvailableSpaces && this._direction == "right"){
-                    this._parts.push(new snakePart(lastSquare._x - 1, lastSquare._y ));
 
-                }else if({x: lastSquare._x, y: lastSquare._y + 1} in currentAvailableSpaces && this._direction == "down"){
-                    this._parts.push(new snakePart(lastSquare._x , lastSquare._y + 1) );
-                }else if({x: lastSquare._x, y: lastSquare._y - 1} in currentAvailableSpaces && this._direction == "up"){
-                    this._parts.push(new snakePart(lastSquare._x, lastSquare._y -1));
-                }
-                console.log("Parts: " + this._parts);
+                this._parts.push(new snakePart(this._head._x + 1, this._head._y));
             }
             
         }
@@ -207,6 +179,8 @@ function gridCollision(gridSpace1,gridSpace2){
     if(gridSpace1._x == gridSpace2._x && gridSpace1._y == gridSpace2._y){
         console.log("Add Part");
         snake.addPart(2);
+        apple.updateApple();
+        console.log("Collide");
     }
 }
 function setupSnake() {
@@ -313,11 +287,6 @@ function resize() {
 
 function getDxDy() {
     setup();
-
-
-
-
-
     getSquares();
     squareLocations.map(square => square.draw());
 
