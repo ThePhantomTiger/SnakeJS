@@ -23,7 +23,7 @@ var newDirection = 'left';
 var snake;
 var apple;
 
-var availableSpaces = [];``
+var availableSpaces = []; ``
 
 class Apple {
     constructor(x, y) {
@@ -37,18 +37,19 @@ class Apple {
     }
     updateApple() {
         console.log("New Apple");
-        
-            
-        let currentAvailableSpaces = availableSpaces.filter(space=> (space.x != snake._head._x || space.y != snake._head._y)
-            && (snake._parts.every(snakePart=> snakePart._x != space.x || snakePart._y != space.y)) );
+
+
+        let currentAvailableSpaces = availableSpaces.filter(space => space.x != snake._head._x
+            && space.y != snake._head._y)
+
         console.log("Avaible Spaces: " + currentAvailableSpaces.length);
-        if(currentAvailableSpaces.length <= 0){
+        if (currentAvailableSpaces.length <= 0) {
             console.log("You Win");
         }
-
-
+        let location = squareLocations[(this._y * squares) + this._x];
+        ctx.clearRect(location.x, location.y, squareSize, squareSize);
         var applePosition = currentAvailableSpaces[Math.floor(Math.random() * currentAvailableSpaces.length)];
-        
+
         this._x = applePosition.x;
         this._y = applePosition.y;
     }
@@ -90,9 +91,8 @@ class Snake {
     }
     draw() {
         this._head.draw();
-        console.log(this._parts);
-        if(this._parts.length > 0){
-            this._parts.map(snakePart=>{snakePart.draw()});
+        if (this._parts.length > 0) {
+            this._parts.forEach(snakePart => { snakePart.draw() });
 
         }
     }
@@ -124,59 +124,77 @@ class Snake {
         borderCheck(tempNewHead);
         this.shiftSnake(tempNewHead);
     }
-    shiftSnake(tempHead){
-        if(this._parts.length > 0){
+    shiftSnake(tempHead) {
+        if (this._parts.length > 0) {
             this._parts.unshift(this._head);
             let lastPost = this._parts.pop();
             clearGridRect(lastPost);
-        }else{
+        } else {
             clearGridRect(this._head);
         }
         this._head = tempHead;
 
     }
-    addPart(amount){
+    addPart(amount) {
         this._partBuffer += amount;
-        
-        if(squares <= this._parts.length){
+
+        if (squares <= this._parts.length) {
             alert("You Win");
             getDxDy();
         }
-        for(let part = 0; part < this._partBuffer; part++){
-            let currentAvailableSpaces = squareLocations.filter(square => (square._x != this._head.x && square._y != this._head.y) && this._parts.filter());
+        for (let part = 0; part < this._partBuffer; part++) {
 
-            if(this._parts.length > 0){
-               continue;
-               
-                
-            }else{
+
+            if (this._parts.length > 0) {
+                let lastSquare = this._parts[this._parts.length - 1]
+                let currentAvailableSpaces = {
+                    right:
+                        { x: lastSquare._x + 1, y: lastSquare._y },
+                    left:
+                        { x: lastSquare._x - 1, y: lastSquare._y },
+                    down:
+                        { x: lastSquare._x, y: lastSquare._y + 1 },
+                    right:
+                        { x: lastSquare._x, y: lastSquare._y - 1 }
+                };
+                if (currentAvailableSpaces.right.x != this._head._x &&
+                    currentAvailableSpaces.right.y != this._head._y) {
+                    this._parts.push(new snakePart(currentAvailableSpaces.right.x,
+                        currentAvailableSpaces.right.y));
+                    this._partBuffer--;
+                }
+
+
+
+            } else {
                 let lastSquare = this._head;
 
                 this._parts.push(new snakePart(this._head._x + 1, this._head._y));
+                this._partBuffer--;
             }
-            
+
         }
 
 
     }
 }
-function clearGridRect(gridReference){
+function clearGridRect(gridReference) {
     let location = squareLocations[(gridReference._y * squares) + gridReference._x];
     ctx.fillStyle = '#372E2E';
     ctx.clearRect(location._x - dx, location._y - dy, squareSize + (dx * 2), squareSize + (dx * 2));
-    ctx.fillRect(location._x , location._y , squareSize , squareSize);
+    ctx.fillRect(location._x, location._y, squareSize, squareSize);
 
 
 }
-function borderCheck(snakeHead){
-    if(snakeHead._x >= squares || snakeHead._y >= squares || snakeHead._x < 0 || snakeHead._y < 0 ){
+function borderCheck(snakeHead) {
+    if (snakeHead._x >= squares || snakeHead._y >= squares || snakeHead._x < 0 || snakeHead._y < 0) {
         alert("Dead");
         getDxDy();
     }
 }
 
-function gridCollision(gridSpace1,gridSpace2){
-    if(gridSpace1._x == gridSpace2._x && gridSpace1._y == gridSpace2._y){
+function gridCollision(gridSpace1, gridSpace2) {
+    if (gridSpace1._x == gridSpace2._x && gridSpace1._y == gridSpace2._y) {
         console.log("Add Part");
         snake.addPart(2);
         apple.updateApple();
@@ -255,14 +273,14 @@ function setup() {
         squareSize = width < height ? ((width - (xOffset * 2) - (dx * squares)) / squares) : ((height - (yOffset * 2) - (dy * squares)) / squares);
         rows = 0;
         columns = 0;
-        
-        for(let row = 0; row < squares; row++){
-            for(let column = 0; column < squares; column++){
-                availableSpaces.push({x:column, y:row});
+
+        for (let row = 0; row < squares; row++) {
+            for (let column = 0; column < squares; column++) {
+                availableSpaces.push({ x: column, y: row });
             }
         }
     }
-   
+
 
 
 }
@@ -294,7 +312,7 @@ function getDxDy() {
     setupApple();
     //drawSnake();
     if (timer == null) {
-        timer = setInterval(gameLoop, 150);
+        timer = setInterval(gameLoop, 100);
     }
 }
 function setupApple() {
@@ -305,7 +323,7 @@ function setupApple() {
 
 function gameLoop() {
     snake.move();
-    gridCollision(apple,snake._head);
+    gridCollision(apple, snake._head);
     snake.draw();
     apple.draw();
 }
@@ -363,7 +381,6 @@ function getSquares() {
             initialY += squareSize + dy;
 
         }
-        console.log(squareLocations);
 
         rows = squares;
         columns = squares;
@@ -395,7 +412,7 @@ function setKey(event) {
                 snake._directionQue.push('left');
 
             }
-            
+
             break;
         case 83:
             if (snake._directionQue[snake._directionQue.length - 1] != 'up' && snake._directionQue[snake._directionQue.length - 1] != "down") {
