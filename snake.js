@@ -39,10 +39,9 @@ class Apple {
         console.log("New Apple");
 
 
-        let currentAvailableSpaces = availableSpaces.filter(space => space.x != snake._head._x
-            && space.y != snake._head._y)
+        let currentAvailableSpaces = availableSpaces.filter(space => space.x != snake._head._x && space.y != snake._head._y &&
+            snake._parts.every(part => part._x != space.x && part._y != space.y) )
 
-        console.log("Avaible Spaces: " + currentAvailableSpaces.length);
         if (currentAvailableSpaces.length <= 0) {
             console.log("You Win");
         }
@@ -127,55 +126,36 @@ class Snake {
     shiftSnake(tempHead) {
         if (this._parts.length > 0) {
             this._parts.unshift(this._head);
-            let lastPost = this._parts.pop();
-            clearGridRect(lastPost);
+            if (this._partBuffer < 1) {
+                let lastPost = this._parts.pop();
+                clearGridRect(lastPost);
+            }
+            else {
+                
+                this._partBuffer--;
+            }
         } else {
-            clearGridRect(this._head);
+            if(this._partBuffer > 0){
+                this._parts.push(this._head);
+                this._partBuffer--;
+            }
+            else{
+                clearGridRect(this._head);
+
+            }
         }
         this._head = tempHead;
 
     }
     addPart(amount) {
         this._partBuffer += amount;
+    }
+    selfCollision(){
+       if(this._parts.every(part => part._x != this._head._x && part._y != this._head._y) == false){
+        alert("Dead");
+        getDxDy();
 
-        if (squares <= this._parts.length) {
-            alert("You Win");
-            getDxDy();
-        }
-        for (let part = 0; part < this._partBuffer; part++) {
-
-
-            if (this._parts.length > 0) {
-                let lastSquare = this._parts[this._parts.length - 1]
-                let currentAvailableSpaces = {
-                    right:
-                        { x: lastSquare._x + 1, y: lastSquare._y },
-                    left:
-                        { x: lastSquare._x - 1, y: lastSquare._y },
-                    down:
-                        { x: lastSquare._x, y: lastSquare._y + 1 },
-                    right:
-                        { x: lastSquare._x, y: lastSquare._y - 1 }
-                };
-                if (currentAvailableSpaces.right.x != this._head._x &&
-                    currentAvailableSpaces.right.y != this._head._y) {
-                    this._parts.push(new snakePart(currentAvailableSpaces.right.x,
-                        currentAvailableSpaces.right.y));
-                    this._partBuffer--;
-                }
-
-
-
-            } else {
-                let lastSquare = this._head;
-
-                this._parts.push(new snakePart(this._head._x + 1, this._head._y));
-                this._partBuffer--;
-            }
-
-        }
-
-
+       } 
     }
 }
 function clearGridRect(gridReference) {
@@ -326,6 +306,8 @@ function gameLoop() {
     gridCollision(apple, snake._head);
     snake.draw();
     apple.draw();
+    snake.selfCollision();
+
 }
 
 
