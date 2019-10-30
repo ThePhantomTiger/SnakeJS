@@ -39,15 +39,20 @@ class Apple {
         console.log("New Apple");
 
 
-        let currentAvailableSpaces = availableSpaces.filter(space => space.x != snake._head._x && space.y != snake._head._y &&
-            snake._parts.every(part => part._x != space.x && part._y != space.y) )
+        let currentAvailableSpaces = availableSpaces.filter(space => (space.x != snake._head._x || space.y != snake._head._y) &&
+            snake._parts.every(part => part._x != space.x || part._y != space.y));
 
         if (currentAvailableSpaces.length <= 0) {
             console.log("You Win");
         }
+
         let location = squareLocations[(this._y * squares) + this._x];
         ctx.clearRect(location.x, location.y, squareSize, squareSize);
-        var applePosition = currentAvailableSpaces[Math.floor(Math.random() * currentAvailableSpaces.length)];
+        let newRand = Math.floor(Math.random() * (currentAvailableSpaces.length));
+        let applePosition = currentAvailableSpaces[newRand];
+
+        console.log(applePosition.length);
+        console.log(newRand);
 
         this._x = applePosition.x;
         this._y = applePosition.y;
@@ -89,7 +94,14 @@ class Snake {
         this._directionQue = [];
     }
     draw() {
+
+        //Draw The Snakes Head
         this._head.draw();
+
+        //Draw The Snakes Eyes
+        this.drawSnakeEyes();
+
+        //Draw The Rest Of The Snakes Body.
         if (this._parts.length > 0) {
             this._parts.forEach(snakePart => { snakePart.draw() });
 
@@ -122,7 +134,23 @@ class Snake {
         }
         borderCheck(tempNewHead);
         this.shiftSnake(tempNewHead);
+
+
     }
+
+    drawSnakeEyes() {
+
+
+        let location = squareLocations[(this._head._y * squares) + this._head._x];
+        ctx.fillStyle = '#000';
+        ctx.fillRect(location._x + (squareSize / 8), location._y + (squareSize / 8), squareSize / 4, squareSize / 4);
+        ctx.fillRect(location._x + squareSize - (squareSize / 8) - (squareSize / 4), location._y + (squareSize / 8), squareSize / 4, squareSize / 4);
+        
+
+
+
+    }
+
     shiftSnake(tempHead) {
         if (this._parts.length > 0) {
             this._parts.unshift(this._head);
@@ -131,15 +159,15 @@ class Snake {
                 clearGridRect(lastPost);
             }
             else {
-                
+
                 this._partBuffer--;
             }
         } else {
-            if(this._partBuffer > 0){
+            if (this._partBuffer > 0) {
                 this._parts.push(this._head);
                 this._partBuffer--;
             }
-            else{
+            else {
                 clearGridRect(this._head);
 
             }
@@ -150,12 +178,14 @@ class Snake {
     addPart(amount) {
         this._partBuffer += amount;
     }
-    selfCollision(){
-       if(this._parts.every(part => part._x != this._head._x && part._y != this._head._y) == false){
-        alert("Dead");
-        getDxDy();
+    selfCollision() {
+        if (this._parts.every(part => part._x != this._head._x || part._y != this._head._y) == false) {
+            console.log(this._parts);
+            console.log(this._head);
+            alert("Dead");
+            getDxDy();
 
-       } 
+        }
     }
 }
 function clearGridRect(gridReference) {
@@ -190,41 +220,7 @@ function setupSnake() {
 
 }
 
-function drawSnake() {
-    ctx.fillStyle = 'lime';
 
-    var i = 0;
-    for (i; i < snake.length; i++) {
-        ctx.fillStyle = 'lime';
-        ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0], squareLocations[snake[i].x][snake[i].y][1], squareSize, squareSize);
-        if (i == 0) {
-            console.log("Drawing eyes");
-            ctx.fillStyle = '#000000';
-            switch (direction) {
-                case "left":
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize / 2.5), squareSize / 5, squareSize / 5);
-                    break;
-                case "right":
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize / 2.5), squareSize / 5, squareSize / 5);
-                    break;
-                case "up":
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + squareSize / 5, squareSize / 5, squareSize / 5);
-                    break;
-                case "down":
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + squareSize / 5, squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize / 2.5), squareSize / 5, squareSize / 5);
-                    ctx.fillRect(squareLocations[snake[i].x][snake[i].y][0] + (squareSize - squareSize / 2.5), squareLocations[snake[i].x][snake[i].y][1] + (squareSize - squareSize / 2.5), squareSize / 5, squareSize / 5);
-                    break;
-
-            }
-
-
-        }
-
-    }
-}
 
 var gameType = "normal"
 
