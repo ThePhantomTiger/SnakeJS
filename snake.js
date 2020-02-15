@@ -1,405 +1,340 @@
-var squareLocations = [];
-var started = false;
-var canvas;
-var ctx;
-var height;
-var width;
-var dx;
-var dy;
-var squareSize;
-var xOffset = 50;
-var yOffset = 50;
-
-var startX;
-var startY;
-var x;
-var y;
-var rows = 0;
-var columns = 0;
-var direction = 'left';
-var currentRow;
-var currentCol;
-var newDirection = 'left';
-var snake;
-var apple;
-
-var availableSpaces = []; ``
-
-class Apple {
-    constructor(x, y) {
-        this._x = x;
-        this._y = y;
-    }
-    draw() {
-        let location = squareLocations[((this._y) * squares) + this._x];
-        ctx.fillStyle = '#FF0000';
-        ctx.fillRect(location._x, location._y, squareSize, squareSize);
-    }
-    updateApple() {
-        console.log("New Apple");
 
 
-        let currentAvailableSpaces = availableSpaces.filter(space => (space.x != snake._head._x || space.y != snake._head._y) &&
-            snake._parts.every(part => part._x != space.x || part._y != space.y));
-
-        if (currentAvailableSpaces.length <= 0) {
-            console.log("You Win");
-        }
-
-        let location = squareLocations[(this._y * squares) + this._x];
-        ctx.clearRect(location.x, location.y, squareSize, squareSize);
-        let newRand = Math.floor(Math.random() * (currentAvailableSpaces.length));
-        let applePosition = currentAvailableSpaces[newRand];
-
-        console.log(applePosition.length);
-        console.log(newRand);
-
-        this._x = applePosition.x;
-        this._y = applePosition.y;
-    }
-}
-
-class snakePart {
-    constructor(x, y) {
-        this._x = x;
-        this._y = y;
-
-    }
-    draw() {
-        ctx.fillStyle = 'lime';
-        let location = squareLocations[(this._y * squares) + this._x];
-        ctx.fillRect(location._x, location._y, squareSize, squareSize);
-    }
-}
-
-class Square {
-    constructor(x, y) {
-        this._x = x;
-        this._y = y;
-
-    }
-    draw() {
-        ctx.fillStyle = '#372E2E';
-        ctx.fillRect(this._x, this._y, squareSize, squareSize);
-    }
-}
-
-
-class Snake {
-    constructor(x, y) {
-        this._parts = [];
-        this._head = new snakePart(x, y);
-        this._direction = "right";
-        this._partBuffer = 0;
-        this._directionQue = [];
-    }
-    draw() {
-
-        //Draw The Snakes Head
-        this._head.draw();
-
-        //Draw The Snakes Eyes
-        this.drawSnakeEyes();
-
-        //Draw The Rest Of The Snakes Body.
-        if (this._parts.length > 0) {
-            this._parts.forEach(snakePart => { snakePart.draw() });
-
-        }
-    }
-    move() {
-        var tempNewHead;
-        if (this._directionQue.length > 0) {
-            let tempDirection = this._directionQue.shift();
-            if ((tempDirection == "right" && this._direction == "left") || (tempDirection == "left" && this._direction == "right")
-                || (tempDirection == "up" && this._direction == "down") || (tempDirection == "down" && this._direction == "up")) {
-                ;
-            } else {
-                this._direction = tempDirection;
-            }
-        }
-        switch (this._direction) {
-            case 'up':
-                tempNewHead = new snakePart(this._head._x, this._head._y - 1);
-                break;
-            case 'down':
-                tempNewHead = new snakePart(this._head._x, this._head._y + 1);
-                break;
-            case 'left':
-                tempNewHead = new snakePart(this._head._x - 1, this._head._y);
-                break;
-            case 'right':
-                tempNewHead = new snakePart(this._head._x + 1, this._head._y);
-                break;
-        }
-        borderCheck(tempNewHead);
-        this.shiftSnake(tempNewHead);
-
-
-    }
-
-    drawSnakeEyes() {
-
-
-        let location = squareLocations[(this._head._y * squares) + this._head._x];
-        ctx.fillStyle = '#000';
-        ctx.fillRect(location._x + (squareSize / 8), location._y + (squareSize / 8), squareSize / 4, squareSize / 4);
-        ctx.fillRect(location._x + squareSize - (squareSize / 8) - (squareSize / 4), location._y + (squareSize / 8), squareSize / 4, squareSize / 4);
-        
-
-
-
-    }
-
-    shiftSnake(tempHead) {
-        if (this._parts.length > 0) {
-            this._parts.unshift(this._head);
-            if (this._partBuffer < 1) {
-                let lastPost = this._parts.pop();
-                clearGridRect(lastPost);
-            }
-            else {
-
-                this._partBuffer--;
-            }
-        } else {
-            if (this._partBuffer > 0) {
-                this._parts.push(this._head);
-                this._partBuffer--;
-            }
-            else {
-                clearGridRect(this._head);
-
-            }
-        }
-        this._head = tempHead;
-
-    }
-    addPart(amount) {
-        this._partBuffer += amount;
-    }
-    selfCollision() {
-        if (this._parts.every(part => part._x != this._head._x || part._y != this._head._y) == false) {
-            console.log(this._parts);
-            console.log(this._head);
-            alert("Dead");
-            getDxDy();
-
-        }
-    }
-}
-function clearGridRect(gridReference) {
-    let location = squareLocations[(gridReference._y * squares) + gridReference._x];
-    ctx.fillStyle = '#372E2E';
-    ctx.clearRect(location._x - dx, location._y - dy, squareSize + (dx * 2), squareSize + (dx * 2));
-    ctx.fillRect(location._x, location._y, squareSize, squareSize);
-
-
-}
-function borderCheck(snakeHead) {
-    if (snakeHead._x >= squares || snakeHead._y >= squares || snakeHead._x < 0 || snakeHead._y < 0) {
-        alert("Dead");
-        getDxDy();
-    }
-}
-
-function gridCollision(gridSpace1, gridSpace2) {
-    if (gridSpace1._x == gridSpace2._x && gridSpace1._y == gridSpace2._y) {
-        console.log("Add Part");
-        snake.addPart(2);
-        apple.updateApple();
-        console.log("Collide");
-    }
-}
-function setupSnake() {
-
-    currentRow = Math.floor(rows / 2);
-    currentCol = Math.floor(columns / 2);
-    snake = new Snake(currentCol, currentRow);
-    snake.draw();
-
-}
-
-
-
-var gameType = "normal"
+let keyPressBuffer = [];
+let currentDirection = 'right';
+let snake;
+let apple;
+let intervalOn = false;
+let width;
+let context;
+let canvas;
+let score = 0;
+let myInterval = null;
+let alive = true;
+let startTime;
 
 function setup() {
-    availableSpaces = [];
-    canvas = document.getElementById('canvas');
-    ctx = canvas.getContext('2d');
-    height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-    width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    let gameAreaSide = window.innerHeight >= window.innerWidth ? window.innerWidth : window.innerHeight;
+    let gameArea = document.querySelector('#game-area');
 
-    console.log("Log Width: " + width);
-    console.log("Log Height: " + height);
-    canvas.width = width;
-    canvas.height = height;
-    ctx.fillStyle = '#372E2E';
-    ctx.lineWidth = 0;
-    squares = 12;
 
-    if (gameType == "scale") {
-        dx = (width - xOffset) / 200;
-        dy = dx;
-        squareSize = (width - (xOffset * 2)) / squares;
-    } else if (gameType == "normal") {
-        dx = 3;
-        dy = dx;
-        squareSize = width < height ? ((width - (xOffset * 2) - (dx * squares)) / squares) : ((height - (yOffset * 2) - (dy * squares)) / squares);
-        rows = 0;
-        columns = 0;
+    let ui = document.querySelector('#ui');
+    let uiHeight = ui.offsetHeight;
+    ui.style.width = gameAreaSide - uiHeight + 'px';
 
-        for (let row = 0; row < squares; row++) {
-            for (let column = 0; column < squares; column++) {
-                availableSpaces.push({ x: column, y: row });
-            }
-        }
+
+
+
+    if (gameAreaSide < 450) {
+        gameArea.style.width = gameAreaSide - uiHeight + 'px';
+        gameArea.style.height = gameAreaSide - uiHeight + 'px';
+
+    }
+    else {
+        gameArea.style.width = gameAreaSide + 'px';
+        gameArea.style.height = gameAreaSide + 'px';
     }
 
+    
+    if(canvas == null)
+    {
+        canvas = document.createElement('canvas');
+        document.querySelector('#canvas').appendChild(canvas);
+        context = canvas.getContext('2d');
+        document.addEventListener('keydown', keyDown, false);
+
+
+    }
+
+    canvas.width = gameAreaSide - uiHeight;
+    canvas.height = gameAreaSide - uiHeight;
+
+
+
+
+    width = (document.querySelector('#ui').style.width).substring(0, 3);
+
+    
+    drawSquares();
+    
+}
+
+function start()
+{
+    console.log('starting...');
+    score = 0;
+
+    startTime = new Date().getTime();
+
+    drawUI();
+
+    drawSquares();
+    alive = true;
+    if(intervalOn == false)
+    {
+        console.log('settingInterval');
+        myInterval = setInterval(update, 100, context);
+        intervalOn = true;
+
+    }
+
+    snake = new Snake(8, 4)
+    snake.addPartManual(8,3);
+    snake.addPartManual(8,2);
+    snake.addPartManual(8,1);
+    snake.addPartManual(8,0);
+
+    apple = new Apple();
 
 
 }
 
-
-
-timerApple = null;
-
-
-
-
-
-function resize() {
-    setup();
-    getSquares();
-
-    squareLocations.map(square => square.draw());
-    setupSnake();
-    setupApple();
-
-}
-
-function getDxDy() {
-    setup();
-    getSquares();
-    squareLocations.map(square => square.draw());
-
-    setupSnake();
-    setupApple();
-    //drawSnake();
-    if (timer == null) {
-        timer = setInterval(gameLoop, 100);
+function drawSquares() {
+    for (let index = 0; index < 256; index++) {
+        let topOffset = width / 60;
+        let leftOffset = width / 44.8;
+        let x = leftOffset + ((width / 16.3) * Math.floor(index % 16));
+        let y = topOffset + ((width / 16.3) * Math.floor(index / 16));
+        let size = width / 22.4;
+        context.fillRect(x, y, size, size);
     }
 }
-function setupApple() {
-    apple = new Apple(0, 0);
-    apple.updateApple();
+
+function update()
+{
+    snake.update();
+    if(!alive){return;}
+    draw();
+}
+
+function draw() {
+
+
+    //context.clearRect(0, 0, window.innerWidth, window.innerHeight);
     apple.draw();
-}
-
-function gameLoop() {
-    snake.move();
-    gridCollision(apple, snake._head);
     snake.draw();
-    apple.draw();
-    snake.selfCollision();
+    drawUI();
+
+
+
+
+
 
 }
-
-
-
-
-
-function getSquares() {
-    x = squareSize / 2;
-    y = squareSize / 2;
-    rows = 0;
-    columns = 0;
-    var row = 0;
-    var column = 0;
-    squareLocations = [];
-    //Get Rows
-    if (gameType == "scale") {
-        for (y; y < height; y += dy + squareSize) {
-            x = squareSize / 2;
-            if (y > height - squareSize - dy) {
-                break;
-            }
-            rows++;
-
-            //Get Columns
-            for (x; x < width - squareSize - dx; x += dx + squareSize) {
-                if (x > window.innerWidth - startX - dx) {
-                    break;
-                }
-
-                squareLocations.push(new Square(x, y));
-                columns++;
-                // if(x_pos % 2 != 0 )
-                // {
-                //     x_pos += 0.5;
-                // }
-            }
-            row += 1;
-        }
-        columns = Math.floor(columns / rows)
-    }
-    else if (gameType == "normal") {
-        var initialY = yOffset;
-        for (let squareRow = 0; squareRow < squares; squareRow++) {
-
-            var initialX = (width / 2) - (squareSize * (squares / 2));
-            for (let squareColumn = 0; squareColumn < squares; squareColumn++) {
-
-                squareLocations.push(new Square(initialX, initialY));
-                initialX += squareSize + dx;
-
+function keyDown(event)
+{
+    if(keyPressBuffer.length < 7 
+        && event.keyCode in keyMap
+         && keyPressBuffer[keyPressBuffer.length - 1] != keyMap[event.keyCode] 
+         && keyMap[event.keyCode] != currentDirection
+         ){
+            if(!(keyPressBuffer.length == 0 && keyMap[event.keyCode] == oppositeMap[currentDirection])){
+                keyPressBuffer.push(keyMap[event.keyCode]);
 
             }
-            initialY += squareSize + dy;
-
-        }
-
-        rows = squares;
-        columns = squares;
-    };
-}
-
-
-timer = null;
-
-
-
-
-function setKey(event) {
-    switch (event.keyCode) {
-        case 87:
-            if (snake._directionQue[snake._directionQue.length - 1] != 'down' && snake._directionQue[snake._directionQue.length - 1] != "up") {
-                snake._directionQue.push('up');
-                break;
-            }
-
-
-        case 68:
-            if (snake._directionQue[snake._directionQue.length - 1] != 'left' && snake._directionQue[snake._directionQue.length - 1] != "right") {
-                snake._directionQue.push('right');
-            }
-            break;
-        case 65:
-            if (snake._directionQue[snake._directionQue.length - 1] != 'right' && snake._directionQue[snake._directionQue.length - 1] != "left") {
-                snake._directionQue.push('left');
-
-            }
-
-            break;
-        case 83:
-            if (snake._directionQue[snake._directionQue.length - 1] != 'up' && snake._directionQue[snake._directionQue.length - 1] != "down") {
-                snake._directionQue.push('down');
-            }
-            break;
     }
 }
 
+class Position {
+    constructor(row, column) {
+        if(row == undefined || column == undefined)
+        {
+            return;
+        }
+        this.row = row;
+        this.column = column;
+    }
+}
 
-document.addEventListener("keydown", setKey);
+const keyMap = 
+{
+    37 : 'left',
+    38 : 'up',
+    39 : 'right',
+    40 : 'down',
 
+    87 : 'up',
+    65 : 'left',
+    68 : 'right',
+    83 : 'down'
+};
+
+const oppositeMap = 
+{
+    'left' : 'right',
+    'right' : 'left',
+    'up' : 'down',
+    'down' : 'up'
+}
+function incrementScore()
+{
+    score++;
+}
+function getTimeChange()
+{
+    let now = new Date().getTime();
+    let distance = now - startTime;
+    return distance;
+}
+function drawUI()
+{
+    let scoreText = document.querySelector('#score-value');
+    scoreText.innerHTML = score;
+    let secondsText = document.querySelector('#seconds');
+    let minutesText = document.querySelector('#minutes');
+    let seconds = Math.floor(getTimeChange() / 1000);
+    let minutes = Math.floor(seconds / 60);
+    seconds = Math.floor(seconds % 60);
+    secondsText.innerHTML = seconds.toString().length == 1 ? "0" + seconds : seconds;
+    minutesText.innerHTML = minutes.toString().length == 1 ? "0" + minutes : minutes;
+
+    
+}
+function die()
+{
+    snake = null;
+    apple = null;
+    alive = false;
+    clearInterval(myInterval);
+    intervalOn = false;
+    
+}
+class Apple extends Position
+{
+    constructor()
+    {
+        super();
+        let cords = this.generateNewLocation();
+        this.row = cords[0];
+        this.column = cords[1];
+    }
+    update()
+    {
+        let cords = this.generateNewLocation();
+        this.row = cords[0];
+        this.column = cords[1];
+    }
+    generateNewLocation()
+    {
+        let row = Math.floor(Math.random() * 16);
+        let column = Math.floor(Math.random() * 16);
+        if(!snake.body.every(bodyPart => {return bodyPart.row != row && bodyPart.column != column}))
+        {
+            this.generateNewLocation();
+        }
+        return [row,column]
+    }
+    draw()
+    {
+        let topOffset = width / 60;
+        let leftOffset = width / 44.8;
+
+        let xCord = leftOffset + (width / 16.3) * this.column;           
+        let yCord = topOffset + (width / 16.3) * this.row;
+        let size = width / 22.4;
+        
+        context.fillStyle = 'red';
+        context.fillRect(xCord,yCord, size, size);
+    }
+}
+class Snake extends Position
+{
+    constructor(row,column)
+    {
+        super(row,column);
+        this.body = [{'row' : row, 'column' : column}];
+        this.oldRow;
+        this.oldColumn;
+    }
+
+
+    update()
+    {
+        currentDirection = keyPressBuffer.length != 0 ? keyPressBuffer.shift() : currentDirection;
+        this.oldRow = this.body[0].row;
+        this.oldColumn = this.body[0].column;
+        switch(currentDirection)
+        {
+            case 'left':
+                this.body[0].column--;
+                break;
+            case 'right':
+                this.body[0].column++;
+                break;
+            case 'up':
+                this.body[0].row--;
+                break;
+            case 'down':
+                this.body[0].row++;
+                break;
+        }
+        for (let index = 1; index < this.body.length; index++) {
+
+            let tempRow = this.body[index].row;
+            let tempColumn = this.body[index].column;
+
+            this.body[index].row = this.oldRow;
+            this.body[index].column = this.oldColumn;
+
+            this.oldRow = tempRow;
+            this.oldColumn = tempColumn;            
+        }
+        //Out Of Bounds
+        if(this.body[0].row < 0 || this.body[0].column < 0 || this.body[0].row > 15 || this.body[0].column > 15)
+        {
+            die();
+            return;
+        }
+
+        //Self Hit
+        //Slice To Ignore The Head
+        this.body.slice(1).forEach(bodyPart => {if(this.body[0].row == bodyPart.row && this.body[0].column == bodyPart.column){die(); return;}});
+
+        //Eat
+        if(this.body[0].row == apple.row && this.body[0].column == apple.column)
+        {
+            
+            apple.update();
+            incrementScore();
+            this.grow();
+        }
+
+        
+
+        
+
+    }
+    grow()
+    {
+        this.body.push({'row' : this.oldRow, 'column' : this.oldColumn});
+    }
+    draw()
+    {
+        for (let index = 0; index < this.body.length; index++) {
+            let row = this.body[index].row;
+            let column = this.body[index].column;
+            let topOffset = width / 60;
+            let leftOffset = width / 44.8;
+
+            let xCord = leftOffset + (width / 16.3) * column;           
+            let yCord = topOffset + (width / 16.3) * row;
+            let size = width / 22.4;
+            
+            context.fillStyle = 'lime';
+            context.fillRect(xCord,yCord, size, size);
+
+
+            xCord = leftOffset + (width / 16.3) * this.oldColumn;           
+            yCord = topOffset + (width / 16.3) * this.oldRow;
+
+            context.fillStyle = 'black';
+            context.fillRect(xCord, yCord, size, size);
+            
+        }
+    }
+    addPartManual(row, column)
+    {
+        this.body.push({'row' : row, 'column' : column});
+    }
+
+}

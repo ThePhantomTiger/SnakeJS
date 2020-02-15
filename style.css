@@ -1,18 +1,76 @@
-#canvas{
-    background-color: #262121;
-    position: absolute;
-    
-} 
+
 
  body{
     background-color: #262121;
     margin: 0;
     padding: 0;
 } 
-p{
-    display:none;
+
+
+#ui
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap:nowrap;
+    height: 3rem;
+    min-height: 3rem;
+    background-color: red;
+    
+}
+#timer
+{
+   /* justify-self: flex-start; */
+   margin-left: 1rem;
+}
+#score
+{
+    margin-right: 1rem;
 }
 
-.Square{
-    padding: 2% 2% 2% 2%;
+#pause-play
+{
+    height: 90%;
+    padding: 0 3rem;
+    font-size: 1.5rem;
+    
+    color: rgb(119, 117, 117);
+    background-color: lime;
+    border: none;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+}
+#game-area
+{
+    display:block;
+    margin: 0 auto;
+    
+}
+
+.ui-element
+{
+    margin: 0;
+}
+
+
+
+#canvas canvas
+{
+    display:block;
+    background-color: grey;
+}
+
+
+@media only screen and (max-width: 510px )
+{
+    #ui
+    {
+        height: auto;
+        flex-wrap: wrap;
+    }
+
 }

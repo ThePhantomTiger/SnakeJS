@@ -8,10 +8,17 @@
         <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="snake.js"></script>
     </head>
-    <body onload="getDxDy()" onresize="resize()">
-        <canvas id="canvas"></canvas>sa
-      
-        
+    <body onload="setup()" onresize='setup()'>   
+        <div id='game-area'>
+            <div id='ui'>
+                <h1 class='ui-element' id='timer'>Time: <span id='time'><span id='minutes'>00</span>:<span id='seconds'>00</spawn></span></h1>
+                <button onclick='start()' id='pause-play'>Play</button>
+                <h1 id='score'>Score: <span id='score-value'>0</span></h1>
+            </div>
+            <div id='canvas'>
+
+            </div>
+        </div>
         
     </body>
 </html>
