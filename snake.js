@@ -218,7 +218,7 @@ class Apple extends Position
     {
         let row = Math.floor(Math.random() * 16);
         let column = Math.floor(Math.random() * 16);
-        if(!snake.body.every(bodyPart => {return bodyPart.row != row && bodyPart.column != column}))
+        if(!snake.body.every(bodyPart => bodyPart.row != row && bodyPart.column != column))
         {
             this.generateNewLocation();
         }
@@ -322,13 +322,43 @@ class Snake extends Position
             
             context.fillStyle = 'lime';
             context.fillRect(xCord,yCord, size, size);
+            if(index == 0)
+            {
+                switch (currentDirection)
+                {
+                    case 'left':
+                        context.fillStyle = 'black';
+                        context.fillRect(xCord, yCord, size / 4, size / 4);
+                        context.fillRect(xCord, yCord + size - (size / 4), size / 4, size /4 );
+                        break;
+                    case 'right':
+                        context.fillStyle = 'black';
+                        context.fillRect(xCord + size - (size / 4), yCord, size / 4, size / 4);
+                        context.fillRect(xCord + size - (size / 4), yCord + size - (size / 4), size / 4, size /4 );
+                        break;
+                    case 'up':
+                        context.fillStyle = 'black';
+                        context.fillRect(xCord, yCord, size / 4, size / 4);
+                        context.fillRect(xCord + size - (size / 4), yCord , size / 4, size /4 );
+                        break;
+                    case 'down':
+                        context.fillStyle = 'black';
+                        context.fillRect(xCord, yCord + size - (size / 4), size / 4, size / 4);
+                        context.fillRect(xCord + size - (size / 4), yCord + size - (size / 4), size / 4, size /4 );
+                        break;
 
+                }
+            }
 
-            xCord = leftOffset + (width / 16.3) * this.oldColumn;           
-            yCord = topOffset + (width / 16.3) * this.oldRow;
-
-            context.fillStyle = 'black';
-            context.fillRect(xCord, yCord, size, size);
+            if(index == this.body.length - 1)
+            {
+                xCord = leftOffset + (width / 16.3) * this.oldColumn;           
+                yCord = topOffset + (width / 16.3) * this.oldRow;
+    
+                context.fillStyle = 'black';
+                context.fillRect(xCord, yCord, size, size);
+            }
+            
             
         }
     }
